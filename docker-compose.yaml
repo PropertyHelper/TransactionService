@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres
+    env_file:
+      - .postgres.env
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_transactions:/var/lib/postgresql/data
+
+  shop_service:
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "8004:8004"
+    env_file:
+      - .env
+    depends_on:
+      - db
+volumes:
+  postgres_transactions:
