@@ -9,4 +9,6 @@ class ShopDataService:
         self.retriever = retriever
 
     async def get_customers(self, shop_id: uuid.UUID) -> ShopUsers:
-        ...
+        customers = await self.retriever.get_customers(shop_id=shop_id)
+        shop_users = ShopUsers(shop_id=shop_id, users=customers)
+        return shop_users

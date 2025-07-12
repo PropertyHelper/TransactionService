@@ -1,6 +1,6 @@
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 
 from src.api.v1.dependencies import get_customer_data_service
 from src.api.v1.models import TransactionResponse

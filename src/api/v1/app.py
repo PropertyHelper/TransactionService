@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from src.container import Container
 from src.database.models import Base
 from src.api.v1.routers.customer_data import router as customer_router
+from src.api.v1.routers.shop_data import router as shop_router
 
 
 def build_app(container: Container) -> FastAPI:
@@ -36,4 +37,5 @@ def build_app(container: Container) -> FastAPI:
     container.wire(modules=["src.api.v1.routers.customer_data",
                             "src.api.v1.routers.shop_data"])
     app.include_router(customer_router, tags=["Customer"])
+    app.include_router(shop_router, tags=["Shop"])
     return app
