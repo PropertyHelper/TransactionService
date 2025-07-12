@@ -12,13 +12,13 @@ class ItemCreate(BaseModel):
 class TransactionCreate(BaseModel):
     user_id: uuid.UUID
     shop_id: uuid.UUID
-    total_cost: int
     items: ItemCreate
 
 class Item(ItemCreate):
     total_cost: int
 
 class Transaction(TransactionCreate):
+    tid: uuid.UUID
     total_cost: int
     points_allocated: int
     performed_at: datetime.date
