@@ -19,7 +19,7 @@ class Balance(Base):
     user_id: Mapped[uuid.UUID] = mapped_column(primary_key=True)
     shop_id: Mapped[uuid.UUID] = mapped_column(primary_key=True)
     balance: Mapped[int]
-    balanceCreated: Mapped[datetime.date] = mapped_column(default=func.now())
+    balance_created: Mapped[datetime.date] = mapped_column(default=func.now())
 
 class Transaction(Base):
     __tablename__ = "transactions"
