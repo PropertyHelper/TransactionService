@@ -8,4 +8,4 @@ if __name__ == '__main__':
 
     app = build_app(container)
 
-    uvicorn.run(app, port=8003, host="0.0.0.0")
+    uvicorn.run(app, port=8004, host="0.0.0.0")

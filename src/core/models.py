@@ -12,7 +12,7 @@ class ItemCreate(BaseModel):
 class TransactionCreate(BaseModel):
     user_id: uuid.UUID
     shop_id: uuid.UUID
-    items: ItemCreate
+    items: list[ItemCreate]
 
 class Item(ItemCreate):
     total_cost: int
@@ -21,7 +21,8 @@ class Transaction(TransactionCreate):
     tid: uuid.UUID
     total_cost: int
     points_allocated: int
-    performed_at: datetime.date
+    performed_at: datetime.datetime
+    items: list[Item]
 
 class UserBalances(BaseModel):
     user_id: uuid.UUID

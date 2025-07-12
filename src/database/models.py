@@ -28,12 +28,15 @@ class Transaction(Base):
     shop_id: Mapped[uuid.UUID]
     total_cost: Mapped[int]
     points_allocated: Mapped[int]
-    performed_at: Mapped[datetime.date] = mapped_column(default=func.now())
-    items: Mapped["TransactionItem"] = relationship("TransactionItem", back_populates="transaction")
+    performed_at: Mapped[datetime.datetime] = mapped_column(default=func.now())
+    items: Mapped[list["TransactionItem"]] = relationship("TransactionItem", back_populates="transaction")
 
 class TransactionItem(Base):
     __tablename__ = "transaction_items"
     transaction_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("transactions.transaction_id"), primary_key=True)
     item_id: Mapped[uuid.UUID] = mapped_column(primary_key=True)
     quantity: Mapped[int]
+    unit_cost: Mapped[int]
+    point_allocation_percentage: Mapped[int]
     total_cost: Mapped[int]
+    transaction: Mapped["Transaction"] = relationship(back_populates="items")
