@@ -1,5 +1,5 @@
 services:
-  db:
+  transaction_db:
     image: postgres
     env_file:
       - .postgres.env
@@ -8,7 +8,7 @@ services:
     volumes:
       - postgres_transactions:/var/lib/postgresql/data
 
-  shop_service:
+  transaction_service:
     build:
       dockerfile: Dockerfile
     ports:
@@ -16,6 +16,6 @@ services:
     env_file:
       - .env
     depends_on:
-      - db
+      - transaction_db
 volumes:
   postgres_transactions:
