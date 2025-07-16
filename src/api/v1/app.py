@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from prometheus_fastapi_instrumentator import Instrumentator
 
 from src.container import Container
 from src.database.models import Base
@@ -38,4 +39,5 @@ def build_app(container: Container) -> FastAPI:
                             "src.api.v1.routers.shop_data"])
     app.include_router(customer_router, tags=["Customer"])
     app.include_router(shop_router, tags=["Shop"])
+    Instrumentator(excluded_handlers=["/metrics"]).instrument(app).expose(app)
     return app

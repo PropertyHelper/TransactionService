@@ -14,6 +14,7 @@ dependency-injector = "^4.48.1"
 uvicorn = "^0.35.0"
 asyncpg = "^0.30.0"
 psycopg2-binary = "^2.9.10"
+prometheus-fastapi-instrumentator = "^7.1.0"
 
 
 [build-system]
