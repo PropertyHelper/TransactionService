@@ -5,12 +5,10 @@ def create_db_engine(db_url, echo=True) -> AsyncEngine:
     """
     Create async database engine for PostgreSQL.
 
-    Args:
-        db_url: Database connection string (asyncpg format)
-        echo: Enable SQL query logging (useful for debugging)
+    :param db_url: Database connection string (asyncpg format)
+    :param echo: Enable SQL query logging
 
-    Returns:
-        Configured async SQLAlchemy engine
+    :return Configured async SQLAlchemy engine
 
     Note:
         Engine should be created once and reused throughout application lifecycle
@@ -23,11 +21,9 @@ def create_db_session_factory(engine):
     """
     Create async session factory for database operations.
 
-    Args:
-        engine: Configured async SQLAlchemy engine
+    :param engine: Configured async SQLAlchemy engine
 
-    Returns:
-        Async session maker for creating database sessions
+    :return Async session maker for creating database sessions
 
     Note:
         expire_on_commit=False prevents lazy loading issues after commit

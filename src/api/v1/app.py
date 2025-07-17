@@ -13,11 +13,8 @@ def build_app(container: Container) -> FastAPI:
     """
     Application factory that creates and configures FastAPI instance.
 
-    Args:
-        container: Configured dependency injection container
-
-    Returns:
-        Configured FastAPI application instance
+    :param container: Configured dependency injection container
+    :return Configured FastAPI application instance
     """
 
     @asynccontextmanager
@@ -35,9 +32,11 @@ def build_app(container: Container) -> FastAPI:
         yield
 
     app = FastAPI(lifespan=lifespan)
+    # setyp modules that will use container DI
     container.wire(modules=["src.api.v1.routers.customer_data",
                             "src.api.v1.routers.shop_data"])
     app.include_router(customer_router, tags=["Customer"])
     app.include_router(shop_router, tags=["Shop"])
+    # setup metrics for prometheus
     Instrumentator(excluded_handlers=["/metrics"]).instrument(app).expose(app)
     return app

@@ -6,8 +6,7 @@ class SQLBaseClass:
         """
         Initialize repository with session factory.
 
-        Args:
-            session_factory: Async session maker for database operations
+        :param session_factory: Async session maker for database operations
         """
         self.session_factory = session_factory
 
@@ -15,7 +14,6 @@ class SQLBaseClass:
         """
         Create new database session.
 
-        Returns:
-            Async database session for transaction management
+        :return Async database session for transaction management
         """
         return self.session_factory()

@@ -4,6 +4,7 @@ from src.container import Container
 
 if __name__ == '__main__':
     container = Container()
+    # setup from environment
     container.config.db_url.from_env("db_connection_str", required=True)
 
     app = build_app(container)

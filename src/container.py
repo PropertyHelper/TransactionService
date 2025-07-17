@@ -7,10 +7,13 @@ from src.database.engine import create_db_engine, create_db_session_factory
 
 class Container(containers.DeclarativeContainer):
     """
-    Dependency Injection Container for UserDataService.
+    Dependency Injection Container for TransactionService.
 
     Manages all application dependencies including database connections,
     repositories, and domain services. Follows singleton pattern to avoid duplicating essential objects.
+    Actively used in dependencies.py to later add into FastAPI DI system.
+    Still, decoupled from the FastAPI DI system for ease of transitioning to
+    different frameworks.
     """
 
     config = providers.Configuration()

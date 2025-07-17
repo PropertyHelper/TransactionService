@@ -13,6 +13,12 @@ from src.database.models import (
 )
 
 def model_transaction_to_domain(transaction_model: TransactionModel) -> Transaction:
+    """
+    Transform transaction db model into the domain transaction.
+
+    :param transaction_model: db model
+    :return: domain transaction model
+    """
     return Transaction(
         tid=transaction_model.transaction_id,
         user_id=transaction_model.user_id,
@@ -30,7 +36,27 @@ def model_transaction_to_domain(transaction_model: TransactionModel) -> Transact
     )
 
 class SQLCustomerDataRepository(SQLBaseClass, AbstractCustomerDataRepository):
+    """
+    A repository to interact with infrastructure.
+
+    In our case, it interacts with PostgreSQL via SQLAlchemy.
+    Implements the AbstractCustomerDataRepository contract.
+    Subclasses the SQLBaseClass to get basic things like getting a connection.
+    """
     async def record_transaction(self, transaction: Transaction) -> None:
+        """
+        Save a transaction in the database.
+
+        Logic:
+            - creates a transaction in the database
+            - finds a balance in the shop of a user (or creates one)
+            - increases the balance
+            - records all changes
+        Changes within the outlined logic are a part of the transaciton. They either succeed or fail together.
+
+        :param transaction: domain model of the transaction
+        :return: None
+        """
         async with self.get_session() as session:
             transaction_model = TransactionModel(
                 transaction_id=transaction.tid,
@@ -62,12 +88,26 @@ class SQLCustomerDataRepository(SQLBaseClass, AbstractCustomerDataRepository):
 
     async def get_customer_transactions(self, customer_id: uuid.UUID, offset: int = 0, limit: int = 100) -> list[
         Transaction]:
+        """
+        Get a limit number with offset of most recent transaction of a particular customer.
+
+        :param customer_id: uid
+        :param offset: number of records to skip
+        :param limit: limit the response to the number of records
+        :return: list of transaction domain objects
+        """
         async with self.get_session() as session:
             stmt = select(TransactionModel).options(selectinload(TransactionModel.items)).where(TransactionModel.user_id == customer_id).offset(offset).limit(limit).order_by(TransactionModel.performed_at.desc())
             records = await session.execute(stmt)
             return [model_transaction_to_domain(transaction) for transaction in records.scalars().all()]
 
     async def get_balance(self, customer_id: uuid.UUID) -> list[tuple[uuid.UUID, int]]:
+        """
+        Get a balance of customer in each shop visited at least once.
+
+        :param customer_id: uid
+        :return: list of tuples (shop_id, number of points)
+        """
         async with self.get_session() as session:
             stmt = select(BalanceModel.shop_id, BalanceModel.balance).where(BalanceModel.user_id == customer_id)
             result = await session.execute(stmt)

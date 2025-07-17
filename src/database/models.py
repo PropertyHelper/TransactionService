@@ -15,6 +15,11 @@ class Base(DeclarativeBase):
     pass
 
 class Balance(Base):
+    """
+    Encapsulate the relation between shops and users.
+
+    Balance is stored in fills.
+    """
     __tablename__ = "balances"
     user_id: Mapped[uuid.UUID] = mapped_column(primary_key=True)
     shop_id: Mapped[uuid.UUID] = mapped_column(primary_key=True)
@@ -22,6 +27,13 @@ class Balance(Base):
     balance_created: Mapped[datetime.date] = mapped_column(default=func.now())
 
 class Transaction(Base):
+    """
+    Represent a transaction entity within a database.
+
+    Contains a list of Item objects.
+    Note:
+        - total_cost and points_allocated are expected to be in fills (0.01 AED)
+    """
     __tablename__ = "transactions"
     transaction_id: Mapped[uuid.UUID] = mapped_column(primary_key=True)
     user_id: Mapped[uuid.UUID]
@@ -32,6 +44,14 @@ class Transaction(Base):
     items: Mapped[list["TransactionItem"]] = relationship("TransactionItem", back_populates="transaction")
 
 class TransactionItem(Base):
+    """
+    Store items of each transaction.
+
+    Is mapped to a particular transaction.
+    Is also used to capture cost per selected quantity along with unit cost.
+    Note:
+        - all costs are expected to be in fills (0.01 AED).
+    """
     __tablename__ = "transaction_items"
     transaction_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("transactions.transaction_id"), primary_key=True)
     item_id: Mapped[uuid.UUID] = mapped_column(primary_key=True)
